@@ -84,7 +84,7 @@
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="Publicación"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Panel de Publicación"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Panel de ET"/>
       </bt:ShortStrings>
       <bt:LongStrings>
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Abrir el panel de gestión del flujo de publicación de este documento."/>
