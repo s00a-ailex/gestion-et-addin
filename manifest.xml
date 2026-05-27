@@ -6,7 +6,7 @@
   xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
   xsi:type="TaskPaneApp">
 
-  <Id>6448d7cb-9a73-4b09-a92a-b0d6eb8f9766</Id>
+  <Id>6448d7cb-9a73-4b09-a92a-b0d6eb8f9764</Id>
   <Version>1.0.0.0</Version>
   <ProviderName>Ailex Tech SPA</ProviderName>
   <DefaultLocale>es-CL</DefaultLocale>
