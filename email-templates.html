@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Email Templates</title></head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     INSTRUCCIONES DE USO EN LOGIC APPS
+     
+     1. En el paso "Enviar correo electrónico" de Logic App
+     2. Activar "Contenido HTML" 
+     3. Copiar el HTML del template correspondiente
+     4. Reemplazar los marcadores con expresiones de Logic App:
+     
+     NOMBRE_DOCUMENTO  →  @{triggerBody()?['nombre']}  
+     RESPONSABLE       →  @{triggerBody()?['Responsable']}
+     FECHA             →  @{formatDateTime(utcNow(), 'dd/MM/yyyy HH:mm')} 
+     LINK_DOCUMENTO    →  @{triggerBody()?['{Link}']}
+     EMAIL_DESTINATARIO→  email del rol correspondiente
+     ═══════════════════════════════════════════════════════ -->
+
+
+<!-- ═══════════════════════════════════════════════
+     TEMPLATE 1: SOLICITUD DE PUBLICACIÓN
+     Para: Compliance
+     Trigger: Paso_Actual = Solicitud_Publicacion
+     ═══════════════════════════════════════════════ -->
+<div id="template-1">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 0;font-family:'Segoe UI',Arial,sans-serif;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <tr><td style="background:#1a5c2a;padding:20px 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td><table cellpadding="0" cellspacing="0"><tr>
+        <td style="padding-right:16px;vertical-align:middle;"><div style="width:36px;height:36px;background:#ffffff;border-radius:50%;text-align:center;line-height:36px;"><span style="color:#1a5c2a;font-weight:900;font-size:14px;">BF</span></div></td>
+        <td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:16px;">
+          <div style="color:rgba(255,255,255,0.75);font-size:10px;font-weight:400;letter-spacing:0.1em;text-transform:uppercase;">Banco Falabella</div>
+          <div style="color:#ffffff;font-size:13px;font-weight:600;">Área de Cumplimiento</div>
+        </td>
+      </tr></table></td>
+      <td align="right"><div style="color:rgba(255,255,255,0.6);font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Gestión de Publicaciones</div></td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:#1565c0;height:4px;"></td></tr>
+  <tr><td style="padding:36px 32px 28px;">
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:20px;"><tr>
+      <td style="background:#e3f2fd;border:1px solid #90caf9;border-radius:3px;padding:4px 12px;">
+        <span style="color:#1565c0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">● Nueva Solicitud de Publicación</span>
+      </td>
+    </tr></table>
+    <h1 style="color:#1a1a1a;font-size:20px;font-weight:600;margin:0 0 8px;line-height:1.3;">Documento pendiente de revisión</h1>
+    <p style="color:#5a5a5a;font-size:14px;margin:0 0 28px;line-height:1.6;">Un colaborador ha solicitado la publicación de un documento. Por favor revise y formalice o rechace según corresponda.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border:1px solid #e0e0e0;border-left:3px solid #1565c0;border-radius:0 4px 4px 0;margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Documento</div>
+        <div style="color:#1a1a1a;font-size:16px;font-weight:600;margin-bottom:16px;">📄 NOMBRE_DOCUMENTO</div>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="50%" style="padding-bottom:8px;"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Responsable</div><div style="color:#333;font-size:13px;font-weight:500;">RESPONSABLE</div></td>
+            <td width="50%" style="padding-bottom:8px;"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Fecha de solicitud</div><div style="color:#333;font-size:13px;font-weight:500;">FECHA</div></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;"><tr>
+      <td style="background:#1a5c2a;border-radius:3px;">
+        <a href="LINK_DOCUMENTO" style="display:inline-block;padding:12px 28px;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;">Abrir documento en Word →</a>
+      </td>
+    </tr></table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4ff;border-left:3px solid #1565c0;border-radius:0 4px 4px 0;">
+      <tr><td style="padding:14px 18px;">
+        <div style="color:#1565c0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Pasos a seguir</div>
+        <ol style="margin:0;padding-left:18px;color:#333;font-size:13px;line-height:1.8;">
+          <li>Abra el documento usando el botón de arriba</li>
+          <li>Revise forma y fondo del contenido</li>
+          <li>Use el panel <strong>Publicación → Formalizar Revisión</strong> o <strong>Rechazar</strong></li>
+        </ol>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="background:#f8f9fa;border-top:1px solid #e0e0e0;padding:16px 32px;">
+    <div style="color:#999;font-size:11px;">Mensaje automático — Sistema de Gestión de Publicaciones · Banco Falabella © 2026</div>
+  </td></tr>
+</table>
+</td></tr></table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     TEMPLATE 2: DOCUMENTO EN REVISIÓN DE APROBADORES
+     Para: Aprobadores
+     Trigger: Paso_Actual = Revision_Aprobadores
+     ═══════════════════════════════════════════════ -->
+<div id="template-2" style="margin-top:60px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 0;font-family:'Segoe UI',Arial,sans-serif;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <tr><td style="background:#1a5c2a;padding:20px 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td><table cellpadding="0" cellspacing="0"><tr>
+        <td style="padding-right:16px;vertical-align:middle;"><div style="width:36px;height:36px;background:#ffffff;border-radius:50%;text-align:center;line-height:36px;"><span style="color:#1a5c2a;font-weight:900;font-size:14px;">BF</span></div></td>
+        <td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:16px;">
+          <div style="color:rgba(255,255,255,0.75);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Banco Falabella</div>
+          <div style="color:#ffffff;font-size:13px;font-weight:600;">Área de Cumplimiento</div>
+        </td>
+      </tr></table></td>
+      <td align="right"><div style="color:rgba(255,255,255,0.6);font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Gestión de Publicaciones</div></td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:#2e7d32;height:4px;"></td></tr>
+  <tr><td style="padding:36px 32px 28px;">
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:20px;"><tr>
+      <td style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:3px;padding:4px 12px;">
+        <span style="color:#2e7d32;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">● Requiere su Aprobación</span>
+      </td>
+    </tr></table>
+    <h1 style="color:#1a1a1a;font-size:20px;font-weight:600;margin:0 0 8px;line-height:1.3;">Documento listo para aprobación</h1>
+    <p style="color:#5a5a5a;font-size:14px;margin:0 0 28px;line-height:1.6;">El área de Compliance ha revisado y validado el siguiente documento. Se requiere su aprobación formal para proceder a la publicación.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border:1px solid #e0e0e0;border-left:3px solid #2e7d32;border-radius:0 4px 4px 0;margin-bottom:16px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Documento</div>
+        <div style="color:#1a1a1a;font-size:16px;font-weight:600;margin-bottom:16px;">📄 NOMBRE_DOCUMENTO</div>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="50%" style="padding-bottom:8px;"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Responsable</div><div style="color:#333;font-size:13px;font-weight:500;">RESPONSABLE</div></td>
+            <td width="50%" style="padding-bottom:8px;"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Fecha</div><div style="color:#333;font-size:13px;font-weight:500;">FECHA</div></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <!-- Aviso plazo -->
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff8e1;border:1px solid #ffe082;border-radius:4px;margin-bottom:28px;">
+      <tr><td style="padding:12px 18px;">
+        <div style="color:#f57f17;font-size:12px;font-weight:600;">⏱ Plazo de revisión: 3 días hábiles</div>
+        <div style="color:#7a5900;font-size:12px;margin-top:4px;">Si no se registra acción dentro del plazo, el documento será aprobado automáticamente.</div>
+      </td></tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;"><tr>
+      <td style="background:#1a5c2a;border-radius:3px;">
+        <a href="LINK_DOCUMENTO" style="display:inline-block;padding:12px 28px;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;">Revisar y aprobar →</a>
+      </td>
+    </tr></table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f0f4ff;border-left:3px solid #1565c0;border-radius:0 4px 4px 0;">
+      <tr><td style="padding:14px 18px;">
+        <div style="color:#1565c0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Cómo aprobar</div>
+        <ol style="margin:0;padding-left:18px;color:#333;font-size:13px;line-height:1.8;">
+          <li>Abra el documento usando el botón de arriba</li>
+          <li>Revise el contenido en Word Online</li>
+          <li>Use el panel <strong>Publicación → Revisado sin comentarios</strong> para aprobar</li>
+          <li>O <strong>Revisado con comentarios</strong> para solicitar ajustes</li>
+        </ol>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="background:#f8f9fa;border-top:1px solid #e0e0e0;padding:16px 32px;">
+    <div style="color:#999;font-size:11px;">Mensaje automático — Sistema de Gestión de Publicaciones · Banco Falabella © 2026</div>
+  </td></tr>
+</table>
+</td></tr></table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     TEMPLATE 3: DOCUMENTO DEVUELTO AL USUARIO
+     Para: Responsable del documento
+     Trigger: Paso_Actual = Iteracion_Usuario
+     ═══════════════════════════════════════════════ -->
+<div id="template-3" style="margin-top:60px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 0;font-family:'Segoe UI',Arial,sans-serif;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <tr><td style="background:#1a5c2a;padding:20px 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td><table cellpadding="0" cellspacing="0"><tr>
+        <td style="padding-right:16px;vertical-align:middle;"><div style="width:36px;height:36px;background:#ffffff;border-radius:50%;text-align:center;line-height:36px;"><span style="color:#1a5c2a;font-weight:900;font-size:14px;">BF</span></div></td>
+        <td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:16px;">
+          <div style="color:rgba(255,255,255,0.75);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Banco Falabella</div>
+          <div style="color:#ffffff;font-size:13px;font-weight:600;">Área de Cumplimiento</div>
+        </td>
+      </tr></table></td>
+      <td align="right"><div style="color:rgba(255,255,255,0.6);font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Gestión de Publicaciones</div></td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:#b45309;height:4px;"></td></tr>
+  <tr><td style="padding:36px 32px 28px;">
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:20px;"><tr>
+      <td style="background:#fff8e1;border:1px solid #ffd54f;border-radius:3px;padding:4px 12px;">
+        <span style="color:#b45309;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">● Se Requieren Ajustes</span>
+      </td>
+    </tr></table>
+    <h1 style="color:#1a1a1a;font-size:20px;font-weight:600;margin:0 0 8px;line-height:1.3;">Su documento requiere modificaciones</h1>
+    <p style="color:#5a5a5a;font-size:14px;margin:0 0 28px;line-height:1.6;">El documento ha sido revisado y se han identificado aspectos que requieren su atención antes de continuar con el proceso de publicación.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border:1px solid #e0e0e0;border-left:3px solid #b45309;border-radius:0 4px 4px 0;margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Documento</div>
+        <div style="color:#1a1a1a;font-size:16px;font-weight:600;margin-bottom:16px;">📄 NOMBRE_DOCUMENTO</div>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="50%"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Devuelto por</div><div style="color:#333;font-size:13px;font-weight:500;">DEVUELTO_POR</div></td>
+            <td width="50%"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Fecha</div><div style="color:#333;font-size:13px;font-weight:500;">FECHA</div></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;"><tr>
+      <td style="background:#1a5c2a;border-radius:3px;">
+        <a href="LINK_DOCUMENTO" style="display:inline-block;padding:12px 28px;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;">Abrir y corregir documento →</a>
+      </td>
+    </tr></table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff8e1;border-left:3px solid #b45309;border-radius:0 4px 4px 0;">
+      <tr><td style="padding:14px 18px;">
+        <div style="color:#b45309;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Próximos pasos</div>
+        <ol style="margin:0;padding-left:18px;color:#333;font-size:13px;line-height:1.8;">
+          <li>Abra el documento y revise los comentarios dejados</li>
+          <li>Realice las modificaciones solicitadas</li>
+          <li>Use el panel <strong>Publicación → Solicitar Publicación</strong> para reenviar</li>
+        </ol>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="background:#f8f9fa;border-top:1px solid #e0e0e0;padding:16px 32px;">
+    <div style="color:#999;font-size:11px;">Mensaje automático — Sistema de Gestión de Publicaciones · Banco Falabella © 2026</div>
+  </td></tr>
+</table>
+</td></tr></table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     TEMPLATE 4: LISTO PARA PUBLICAR
+     Para: Compliance
+     Trigger: Paso_Actual = Listo_Publicar
+     ═══════════════════════════════════════════════ -->
+<div id="template-4" style="margin-top:60px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 0;font-family:'Segoe UI',Arial,sans-serif;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <tr><td style="background:#1a5c2a;padding:20px 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td><table cellpadding="0" cellspacing="0"><tr>
+        <td style="padding-right:16px;vertical-align:middle;"><div style="width:36px;height:36px;background:#ffffff;border-radius:50%;text-align:center;line-height:36px;"><span style="color:#1a5c2a;font-weight:900;font-size:14px;">BF</span></div></td>
+        <td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:16px;">
+          <div style="color:rgba(255,255,255,0.75);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Banco Falabella</div>
+          <div style="color:#ffffff;font-size:13px;font-weight:600;">Área de Cumplimiento</div>
+        </td>
+      </tr></table></td>
+      <td align="right"><div style="color:rgba(255,255,255,0.6);font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Gestión de Publicaciones</div></td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:#1a5c2a;height:4px;"></td></tr>
+  <tr><td style="padding:36px 32px 28px;">
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:20px;"><tr>
+      <td style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:3px;padding:4px 12px;">
+        <span style="color:#1a5c2a;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">✓ Aprobaciones Completadas</span>
+      </td>
+    </tr></table>
+    <h1 style="color:#1a1a1a;font-size:20px;font-weight:600;margin:0 0 8px;line-height:1.3;">Documento listo para publicación</h1>
+    <p style="color:#5a5a5a;font-size:14px;margin:0 0 28px;line-height:1.6;">El documento ha completado el proceso de aprobación y está listo para ser publicado. Por favor proceda con la publicación final.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border:1px solid #e0e0e0;border-left:3px solid #1a5c2a;border-radius:0 4px 4px 0;margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Documento</div>
+        <div style="color:#1a1a1a;font-size:16px;font-weight:600;margin-bottom:16px;">📄 NOMBRE_DOCUMENTO</div>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="50%"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Responsable</div><div style="color:#333;font-size:13px;font-weight:500;">RESPONSABLE</div></td>
+            <td width="50%"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Fecha</div><div style="color:#333;font-size:13px;font-weight:500;">FECHA</div></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="margin-bottom:28px;"><tr>
+      <td style="background:#1a5c2a;border-radius:3px;">
+        <a href="LINK_DOCUMENTO" style="display:inline-block;padding:12px 28px;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;">Publicar documento →</a>
+      </td>
+    </tr></table>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#e8f5e9;border-left:3px solid #1a5c2a;border-radius:0 4px 4px 0;">
+      <tr><td style="padding:14px 18px;">
+        <div style="color:#1a5c2a;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">Acción requerida</div>
+        <ol style="margin:0;padding-left:18px;color:#333;font-size:13px;line-height:1.8;">
+          <li>Abra el documento usando el botón de arriba</li>
+          <li>Use el panel <strong>Publicación → Publicar Documento</strong></li>
+          <li>El sistema generará la versión final y el PDF automáticamente</li>
+        </ol>
+      </td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="background:#f8f9fa;border-top:1px solid #e0e0e0;padding:16px 32px;">
+    <div style="color:#999;font-size:11px;">Mensaje automático — Sistema de Gestión de Publicaciones · Banco Falabella © 2026</div>
+  </td></tr>
+</table>
+</td></tr></table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     TEMPLATE 5: DOCUMENTO PUBLICADO
+     Para: Todos (responsable + compliance + aprobadores)
+     Trigger: Paso_Actual = Publicado
+     ═══════════════════════════════════════════════ -->
+<div id="template-5" style="margin-top:60px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 0;font-family:'Segoe UI',Arial,sans-serif;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+  <tr><td style="background:#1a5c2a;padding:20px 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td><table cellpadding="0" cellspacing="0"><tr>
+        <td style="padding-right:16px;vertical-align:middle;"><div style="width:36px;height:36px;background:#ffffff;border-radius:50%;text-align:center;line-height:36px;"><span style="color:#1a5c2a;font-weight:900;font-size:14px;">BF</span></div></td>
+        <td style="vertical-align:middle;border-left:1px solid rgba(255,255,255,0.3);padding-left:16px;">
+          <div style="color:rgba(255,255,255,0.75);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;">Banco Falabella</div>
+          <div style="color:#ffffff;font-size:13px;font-weight:600;">Área de Cumplimiento</div>
+        </td>
+      </tr></table></td>
+      <td align="right"><div style="color:rgba(255,255,255,0.6);font-size:10px;text-transform:uppercase;letter-spacing:0.1em;">Gestión de Publicaciones</div></td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:#1a5c2a;height:4px;"></td></tr>
+  <tr><td style="padding:36px 32px 28px;">
+    <!-- Icono central -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="display:inline-block;width:64px;height:64px;background:#e8f5e9;border-radius:50%;text-align:center;line-height:64px;font-size:28px;">✅</div>
+    </div>
+    <h1 style="color:#1a1a1a;font-size:22px;font-weight:600;margin:0 0 8px;line-height:1.3;text-align:center;">Documento publicado exitosamente</h1>
+    <p style="color:#5a5a5a;font-size:14px;margin:0 0 28px;line-height:1.6;text-align:center;">El documento ha completado el proceso de cumplimiento y ha sido publicado oficialmente.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8f9fa;border:1px solid #e0e0e0;border-radius:4px;margin-bottom:28px;">
+      <tr><td style="padding:20px 24px;">
+        <div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Documento publicado</div>
+        <div style="color:#1a1a1a;font-size:16px;font-weight:600;margin-bottom:16px;">📄 NOMBRE_DOCUMENTO</div>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td width="33%" style="padding-bottom:8px;"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Responsable</div><div style="color:#333;font-size:13px;font-weight:500;">RESPONSABLE</div></td>
+            <td width="33%" style="padding-bottom:8px;"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Publicado por</div><div style="color:#333;font-size:13px;font-weight:500;">PUBLICADO_POR</div></td>
+            <td width="33%" style="padding-bottom:8px;"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Fecha</div><div style="color:#333;font-size:13px;font-weight:500;">FECHA</div></td>
+          </tr>
+          <tr>
+            <td colspan="3"><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;">Ubicación</div><div style="color:#333;font-size:13px;font-weight:500;">Carpeta Maestros · Documentos compartidos</div></td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="margin:0 auto 8px;"><tr>
+      <td style="background:#1a5c2a;border-radius:3px;">
+        <a href="LINK_DOCUMENTO" style="display:inline-block;padding:12px 28px;color:#ffffff;font-size:13px;font-weight:600;text-decoration:none;">Ver documento publicado →</a>
+      </td>
+    </tr></table>
+  </td></tr>
+  <tr><td style="background:#f8f9fa;border-top:1px solid #e0e0e0;padding:16px 32px;">
+    <div style="color:#999;font-size:11px;">Mensaje automático — Sistema de Gestión de Publicaciones · Banco Falabella © 2026</div>
+  </td></tr>
+</table>
+</td></tr></table>
+</div>
+
+</body>
+</html>
