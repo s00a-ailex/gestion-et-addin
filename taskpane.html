@@ -2,10 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gestión de ET</title>
-  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <title>Revisión Legal — Estudio de Título</title>
   <style>
     :root {
       --corp-dark:      #1e3a5f;
@@ -26,10 +24,7 @@
       --radius:         6px;
       --shadow:         0 1px 3px rgba(0,0,0,0.08);
       --transition:     0.15s ease;
-
-      /* compatibilidad con código existente */
       --accent:         #1e3a5f;
-      --accent-hover:   #162d4a;
       --success:        #166534;
       --success-bg:     #f0fdf4;
       --warning:        #7f1d1d;
@@ -43,25 +38,17 @@
       font-size: 13px;
       color: var(--text-primary);
       background: var(--neutral-bg);
-      margin: 0;
-      padding: 0;
-      overflow-y: auto; /* Permite el scroll vertical */
-      overflow-x: hidden; /* Evita scroll horizontal innecesario */
       height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
-    .header {
-      background: #1f2937;
-      color: #fff;
-      padding: 14px 16px;
-      border-bottom: 2px solid var(--corp-dark);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+    /* ── Header ── */
+    .header { background: #1f2937; color: #fff; padding: 14px 16px; border-bottom: 2px solid var(--corp-dark); position: sticky; top: 0; z-index: 10; }
     .header-title { font-size: 14px; font-weight: 600; letter-spacing: 0.01em; }
     .header-sub { font-size: 11px; color: #9ca3af; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+    /* ── Estado ── */
     .estado-bar { background: #fff; border-bottom: 1px solid var(--neutral-mid); padding: 10px 16px; }
     .estado-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); font-weight: 600; margin-bottom: 3px; }
     .estado-value { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--brand); }
@@ -71,6 +58,7 @@
     .estado-dot.gris  { background: var(--text-light); }
     .estado-dot.azul  { background: var(--accent); }
 
+    /* ── Progreso ── */
     .progress-section { padding: 12px 16px 0; }
     .progress-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px; }
     .steps-track { display: flex; align-items: center; margin-bottom: 4px; }
@@ -84,15 +72,18 @@
     .step-item.active .step-name { color: var(--accent); font-weight: 600; }
     .step-item.done   .step-name  { color: var(--accent); }
 
+    /* ── Contenido ── */
     .content { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+    .doc-info { background: #fff; border: 1px solid var(--neutral-mid); border-radius: var(--radius); padding: 10px 12px; box-shadow: var(--shadow); }
+    .doc-info-row { display: flex; justify-content: space-between; align-items: baseline; padding: 3px 0; border-bottom: 1px solid var(--neutral-bg); }
+    .doc-info-row:last-child { border-bottom: none; }
+    .doc-info-key { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+    .doc-info-val { font-size: 11px; font-weight: 600; color: var(--text-primary); text-align: right; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .rol-section { border: 1px solid var(--neutral-mid); border-radius: var(--radius); overflow: hidden; background: #fff; box-shadow: var(--shadow); }
     .rol-section.hidden { display: none; }
-    .rol-header { padding: 8px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--neutral-mid); }
-    .rol-header .rol-icon { font-size: 13px; }
-    .rol-usuario   .rol-header { background: var(--neutral-bg); color: #374151; }
-    .rol-compliance .rol-header { background: #f9fafb; color: #374151; }
-    .rol-aprobador .rol-header { background: #f9fafb; color: #374151; }
+    .rol-header { padding: 8px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--neutral-mid); background: #f9fafb; color: #374151; }
     .rol-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; background: #fff; }
 
     .btn { width: 100%; padding: 8px 14px; border: none; font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 7px; line-height: 1.3; border-radius: 5px; letter-spacing: 0.01em; }
@@ -105,528 +96,343 @@
     .btn-warning:hover:not(:disabled) { background: var(--corp-danger-h); }
     .btn-neutral { background: var(--corp-neutral); color: #374151; }
     .btn-neutral:hover:not(:disabled) { background: var(--corp-neutral-h); }
-    .btn-icon { font-size: 13px; }
 
-    .aprobacion-info { background: var(--neutral-bg); border-radius: var(--radius); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; }
-    .aprobacion-label { font-size: 11px; color: var(--text-secondary); }
-    .aprobacion-counter { font-size: 16px; font-weight: 700; color: var(--accent); }
-    .aprobacion-counter .total { font-size: 11px; color: var(--text-secondary); font-weight: 400; }
-    .aprobacion-bar { height: 4px; background: var(--neutral-mid); border-radius: 2px; overflow: hidden; margin-top: 4px; }
-    .aprobacion-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+    /* ── Bloque informativo / borrador a revisar ── */
+    .review-note { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); padding: 10px 12px; font-size: 12px; color: #1e40af; line-height: 1.45; }
+    .review-note strong { font-weight: 700; }
 
-    .toast { position: fixed; bottom: 16px; left: 16px; right: 16px; padding: 10px 14px; border-radius: var(--radius); font-size: 12px; font-weight: 500; z-index: 100; display: flex; align-items: flex-start; gap: 8px; box-shadow: var(--shadow); transform: translateY(80px); opacity: 0; transition: transform 0.25s ease, opacity 0.25s ease; }
+    /* ── Input de comentario ── */
+    .field-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; display: block; }
+    .field-textarea { width: 100%; padding: 8px; border: 1px solid #e0e0e0; border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical; min-height: 90px; }
+    .field-textarea:focus { outline: none; border-color: var(--corp-dark); box-shadow: 0 0 0 3px rgba(30,58,95,0.1); }
+    .field-error { color: #e53935; font-size: 11px; margin-top: 6px; display: none; }
+    .field-error.show { display: block; }
+
+    /* ── Mensaje final ── */
+    .final-banner { border-radius: var(--radius); padding: 16px; text-align: center; }
+    .final-banner.success { background: var(--success-bg); border: 1px solid #9fd89f; }
+    .final-banner.info    { background: #eff6ff; border: 1px solid #bfdbfe; }
+    .final-banner.danger  { background: var(--warning-bg); border: 1px solid #fecaca; }
+    .final-icon  { font-size: 32px; margin-bottom: 6px; }
+    .final-title { font-size: 14px; font-weight: 700; }
+    .final-sub   { font-size: 11px; margin-top: 6px; line-height: 1.5; }
+    .final-banner.success .final-title { color: var(--success); } .final-banner.success .final-sub { color: #054005; }
+    .final-banner.info    .final-title { color: var(--corp-dark); } .final-banner.info .final-sub { color: #1e40af; }
+    .final-banner.danger  .final-title { color: var(--warning); } .final-banner.danger .final-sub { color: #5c1200; }
+
+    .back-link { background: none; border: none; color: var(--corp-danger); cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 5px; padding: 0; }
+
+    /* ── Selector inferior (Modo Test) ── */
+    .rol-selector { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(248,250,252,0.98); border-top: 1px solid #cbd5e1; padding: 10px 16px; z-index: 9999; backdrop-filter: blur(4px); box-shadow: 0 -4px 12px rgba(0,0,0,0.08); }
+    .rol-selector-label { font-size: 9px; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .rol-selector select { width: 100%; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; font-weight: 500; font-family: inherit; background: #fff; color: #1e293b; cursor: pointer; }
+
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 80px; left: 16px; right: 16px; padding: 10px 14px; border-radius: var(--radius); font-size: 12px; font-weight: 500; z-index: 100; display: flex; align-items: flex-start; gap: 8px; box-shadow: var(--shadow); transform: translateY(120px); opacity: 0; transition: transform .25s ease, opacity .25s ease; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast.success { background: var(--success-bg); color: #054005; border-left: 3px solid var(--success); }
-    .toast.error   { background: var(--warning-bg); color: #5c1200; border-left: 3px solid var(--warning); }
     .toast.info    { background: var(--brand-light); color: var(--brand); border-left: 3px solid var(--accent); }
-    .toast-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
-    .toast-text { flex: 1; line-height: 1.4; }
 
-    .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.75); z-index: 50; align-items: center; justify-content: center; flex-direction: column; gap: 10px; }
-    .loading-overlay.show { display: flex; }
-    .spinner { width: 28px; height: 28px; border: 3px solid var(--neutral-mid); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { font-size: 12px; color: var(--text-secondary); }
-
-    .doc-info { background: #fff; border: 1px solid var(--neutral-mid); border-radius: var(--radius); padding: 10px 12px; box-shadow: var(--shadow); }
-    .doc-info-row { display: flex; justify-content: space-between; align-items: baseline; padding: 3px 0; border-bottom: 1px solid var(--neutral-bg); }
-    .doc-info-row:last-child { border-bottom: none; }
-    .doc-info-key { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
-    .doc-info-val { font-size: 11px; font-weight: 600; color: var(--text-primary); text-align: right; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    .divider { height: 1px; background: var(--neutral-mid); margin: 2px 0; }
-
-    .publicado-banner { background: var(--success-bg); border: 1px solid #9fd89f; border-radius: var(--radius); padding: 16px; text-align: center; display: none; }
-    .publicado-banner.show { display: block; }
-    .publicado-icon  { font-size: 32px; margin-bottom: 6px; }
-    .publicado-title { font-size: 14px; font-weight: 700; color: var(--success); }
-    .publicado-sub   { font-size: 11px; color: #054005; margin-top: 4px; }
-
-    .rol-selector { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: var(--radius); padding: 8px 12px; }
-    .rol-selector-label { font-size: 10px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
-
-    /* ═══════════════════════════════════════════════════════ */
-    /* PANTALLA DE LOGIN / DEMO                               */
-    /* ═══════════════════════════════════════════════════════ */
-    .login-screen { 
-      display: none; 
-      position: fixed; 
-      inset: 0; 
-      background: linear-gradient(135deg, #1e3a5f 0%, #162d4a 100%); 
-      z-index: 1000; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px; 
-    }
-    .login-screen.show { display: flex; }
-    
-    .login-container { 
-      background: #fff; 
-      border-radius: 12px; 
-      padding: 32px; 
-      max-width: 380px; 
-      width: 100%; 
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
-    }
-    
-    .login-logo { 
-      font-size: 48px; 
-      text-align: center; 
-      margin-bottom: 16px; 
-    }
-    
-    .login-title { 
-      font-size: 24px; 
-      font-weight: 700; 
-      color: #1f2937; 
-      text-align: center; 
-      margin-bottom: 8px; 
-    }
-    
-    .login-subtitle { 
-      font-size: 13px; 
-      color: #6b7280; 
-      text-align: center; 
-      margin-bottom: 28px; 
-      line-height: 1.5; 
-    }
-    
-    .login-form { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 12px; 
-      margin-bottom: 20px; 
-    }
-    
-    .login-input { 
-      padding: 10px 14px; 
-      border: 1px solid #e5e7eb; 
-      border-radius: 6px; 
-      font-size: 13px; 
-      font-family: inherit; 
-    }
-    
-    .login-input:focus { 
-      outline: none; 
-      border-color: #1e3a5f; 
-      box-shadow: 0 0 0 3px rgba(30,58,95,0.1); 
-    }
-    
-    .login-button { 
-      padding: 10px 14px; 
-      border: none; 
-      border-radius: 6px; 
-      font-size: 13px; 
-      font-weight: 600; 
-      cursor: pointer; 
-      font-family: inherit; 
-      transition: var(--transition); 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 8px; 
-    }
-    
-    .login-button.primary { 
-      background: #1e3a5f; 
-      color: #fff; 
-    }
-    
-    .login-button.primary:hover { 
-      background: #162d4a; 
-    }
-    
-    .login-button.demo { 
-      background: #f0fdf4; 
-      color: #166534; 
-      border: 2px solid #86efac; 
-    }
-    
-    .login-button.demo:hover { 
-      background: #dcfce7; 
-    }
-    
-    .login-divider { 
-      display: flex; 
-      align-items: center; 
-      gap: 12px; 
-      margin: 20px 0; 
-    }
-    
-    .login-divider::before, .login-divider::after { 
-      content: ''; 
-      flex: 1; 
-      height: 1px; 
-      background: #e5e7eb; 
-    }
-    
-    .login-divider-text { 
-      font-size: 12px; 
-      color: #9ca3af; 
-      font-weight: 500; 
-    }
-    
-    .login-error { 
-      background: #fef2f2; 
-      border: 1px solid #fecaca; 
-      color: #dc2626; 
-      padding: 10px 12px; 
-      border-radius: 6px; 
-      font-size: 12px; 
-      margin-bottom: 12px; 
-      display: none; 
-    }
-    
-    .login-error.show { 
-      display: block; 
-    }
-    
-    .login-info { 
-      background: #eff6ff; 
-      border: 1px solid #bfdbfe; 
-      color: #1e40af; 
-      padding: 10px 12px; 
-      border-radius: 6px; 
-      font-size: 12px; 
-      margin-bottom: 12px; 
-      display: none; 
-    }
-    
-    .login-info.show { 
-      display: block; 
-    }
-    
-    .login-loading { 
-      display: none; 
-      text-align: center; 
-      margin-bottom: 12px;
-      font-size: 12px;
-      color: #6b7280;
-    }
-    
-    .login-loading.show { 
-      display: block; 
-    }
-    
-    .login-spinner-small { 
-      display: inline-block; 
-      width: 20px; 
-      height: 20px; 
-      border: 2px solid #e5e7eb; 
-      border-top-color: #1e3a5f; 
-      border-radius: 50%; 
-      animation: spin 0.7s linear infinite; 
-      margin-right: 8px; 
-      vertical-align: middle;
-    }
-
-    .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  .modal-overlay.hidden {
-    display: none;
-  }
-  .modal-box {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    max-width: 320px;
-    width: 90%;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-    font-family: 'Segoe UI', sans-serif;
-  }
-  .modal-titulo {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1F2937;
-    margin-bottom: 10px;
-  }
-  .modal-mensaje {
-    font-size: 13px;
-    color: #4B5563;
-    margin-bottom: 16px;
-    line-height: 1.5;
-    white-space: pre-line;
-  }
-  .modal-acciones {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-  .modal-acciones .btn {
-    min-width: 80px;
-  }
+    /* ── Modal motivo de rechazo ── */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:300; align-items:center; justify-content:center; }
+    .modal-overlay.show { display:flex; }
+    .modal-box { background:#fff; border-radius:12px; padding:24px; max-width:300px; margin:16px; box-shadow:0 8px 32px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body>
-  <!-- PANTALLA DE LOGIN/DEMO -->
-  <div class="login-screen show" id="loginScreen">
-    <div class="login-container">
-      <div class="login-logo">📋</div>
-      <div class="login-title">Gestión de Publicaciones</div>
-      <div class="login-subtitle">Accede con tu correo corporativo para revisar y aprobar documentos</div>
-      
-      <div class="login-error" id="loginError"></div>
-      <div class="login-info" id="loginInfo"></div>
 
-      <div class="login-loading" id="loginLoading">
-        <div style="display: flex; align-items: center; justify-content: center;">
-          <span class="login-spinner-small"></span>
-          <span>Verificando credenciales...</span>
-        </div>
-      </div>
+  <div id="appContainer" style="display:flex; flex-direction:column; min-height:100vh; padding-bottom:90px;">
 
-      <form class="login-form" id="loginFormElement" onsubmit="return autenticarUsuario(event)">
-        <label style="font-size: 11px; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: -8px;">Correo Electrónico</label>
-        <input 
-          type="email" 
-          id="emailInput" 
-          class="login-input" 
-          placeholder="usuario@empresa.com"
-          autocomplete="email"
-          required
-        />
-        <button type="submit" class="login-button primary" style="width: 100%;">
-          <span>🔐 Acceder</span>
-        </button>
-      </form>
+    <!-- barra superior salir -->
+    <div style="padding:10px 16px; border-bottom:1px solid var(--neutral-mid); background:#fff;">
+      <button class="back-link" onclick="irAInicio()"><span>←</span> Reiniciar Demo</button>
+    </div>
 
-      <div class="login-divider">
-        <span class="login-divider-text">O prueba sin registrarte</span>
-      </div>
+    <div class="header">
+      <div class="header-title">⚖️ Revisión Legal</div>
+      <div class="header-sub" id="docNombre">Estudio de Título — Lote 14, Fundo El Roble</div>
+    </div>
 
-      <button type="button" class="login-button demo" onclick="iniciarModoDemo()" style="width: 100%;">
-        <span>⚡ Acceso Demo/Test</span>
-      </button>
-
-      <div style="font-size: 11px; color: #9ca3af; text-align: center; margin-top: 20px; line-height: 1.5;">
-        <strong>Modo Demo:</strong> Accede sin contraseña para explorar toda la funcionalidad del complemento. Perfecto para que Microsoft valide el add-in.
+    <div class="estado-bar">
+      <div class="estado-label">Estado actual</div>
+      <div class="estado-value">
+        <div class="estado-dot azul" id="estadoDot"></div>
+        <span id="estadoTexto">Borrador en revisión</span>
       </div>
     </div>
+
+    <div class="content" id="content"><!-- render dinámico --></div>
   </div>
 
-  <!-- CONTENEDOR DE LA APLICACIÓN PRINCIPAL -->
-  <div id="appContainer" style="display: none; flex-direction: column; min-height: 100vh; padding-bottom: 80px;">
-    <div style="padding: 10px 16px; border-bottom: 1px solid var(--neutral-mid); background: #fff;">
-      <button onclick="volverAlInicio()" style="background:none; border:none; color:var(--corp-danger); cursor:pointer; font-size:12px; font-weight:600; display:flex; align-items:center; gap:5px; padding:0;">
-        <span>←</span> Salir del Modo Demo / Volver al Login
-      </button>
+  <!-- Selector inferior (Modo Test, solo perspectiva Abogado) -->
+  <div class="rol-selector">
+    <div class="rol-selector-label">
+      <span style="background:#1e3a5f; color:#fff; padding:1px 5px; border-radius:2px;">MODO TEST</span>
+      Perspectiva del revisor
     </div>
-
-  <div class="header">
-    <div class="header-title">📋 Gestión de Publicaciones</div>
-    <div class="header-sub" id="docNombre">Cargando documento...</div>
+    <select disabled title="En modo test solo existe la perspectiva del Abogado">
+      <option>Perspectiva: Abogado</option>
+    </select>
   </div>
 
-  <div class="estado-bar">
-    <div class="estado-label">Estado actual</div>
-    <div class="estado-value">
-      <div class="estado-dot azul" id="estadoDot"></div>
-      <span id="estadoTexto">Cargando...</span>
-    </div>
-  </div>
+  <!-- Toast -->
+  <div class="toast" id="toast"><span id="toastIcon">ℹ️</span><span id="toastText"></span></div>
 
-  <div class="progress-section">
-    <div class="progress-label">Progreso del flujo</div>
-    <div class="steps-track" id="stepsTrack"></div>
-  </div>
-
-  <div class="content">
-
-    <div class="doc-info" id="docInfoPanel">
-      <div class="doc-info-row">
-        <span class="doc-info-key">Nombre</span>
-        <span class="doc-info-val" id="infoResponsable">—</span>
-      </div>
-      <div class="doc-info-row">
-        <span class="doc-info-key">Tipo aprobación</span>
-        <span class="doc-info-val" id="infoTipoAprobacion">—</span>
-      </div>
-      <div class="doc-info-row">
-        <span class="doc-info-key">Última acción</span>
-        <span class="doc-info-val" id="infoUltimaAccion">—</span>
-      </div>
-    </div>
-
-    <div class="publicado-banner" id="publicadoBanner">
-      <div class="publicado-icon" id="publicadoIcon">✅</div>
-      <div class="publicado-title" id="publicadoTitle">Documento Publicado</div>
-      <div class="publicado-sub" id="publicadoSub">Este documento ha sido publicado exitosamente y movido a la carpeta Maestros.</div>
-    </div>
-
-    <!-- USUARIO -->
-    <div class="rol-section rol-usuario hidden" id="seccionUsuario">
-      <div class="rol-header">
-        <span>Acciones del Usuario</span>
-      </div>
-      <div class="rol-body">
-        <button class="btn btn-primary" id="btnSolicitarPublicacion" onclick="accion_solicitarPublicacion()">
-          <span>Solicitar Publicación</span>
-        </button>
-        <button class="btn btn-neutral" id="btnSolicitarProroga" onclick="accion_solicitarProroga()">
-          <span>Solicitar Prórroga</span>
-        </button>
-        <button class="btn btn-neutral" id="btnRatificaVigencia" onclick="accion_ratificarVigencia()">
-          <span>Ratificar Vigencia</span>
-        </button>
-        <button class="btn btn-warning" id="btnSolicitarBaja" onclick="accion_solicitarBaja()">
-          <span>Solicitar Baja</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- COMPLIANCE -->
-    <div class="rol-section rol-compliance hidden" id="seccionCompliance">
-      <div class="rol-header">
-        <span>Acciones de Compliance</span>
-      </div>
-      <div class="rol-body">
-        <button class="btn btn-success" id="btnFormalizarRevision" onclick="accion_formalizarRevision()">
-          <span>Formalizar Revisión</span>
-        </button>
-        <button class="btn btn-warning" id="btnRechazarCompliance" onclick="accion_rechazarCompliance()">
-          <span>Rechazar con Comentarios</span>
-        </button>
-        <button class="btn btn-primary" id="btnPublicar" onclick="accion_publicar()">
-          <span>Publicar Documento</span>
-        </button>
-        <button class="btn btn-warning" id="btnDarBaja" onclick="accion_darBaja()">
-          <span>Dar de Baja</span>
-        </button>
-        <button class="btn btn-warning hidden" id="btnEliminarCaratula" onclick="accion_eliminarCaratula()">
-          <span>🗑️ Eliminar Carátula (Dev)</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- APROBADORES -->
-    <div class="rol-section rol-aprobador hidden" id="seccionAprobadores">
-      <div class="rol-header">
-        <span>Acciones del Aprobador</span>
-      </div>
-      <div class="rol-body">
-        <div class="aprobacion-info" id="aprobacionInfo">
-          <div>
-            <div class="aprobacion-label">Aprobaciones registradas</div>
-            <div class="aprobacion-bar" style="width:120px; margin-top:6px;">
-              <div class="aprobacion-bar-fill" id="aprobacionBarFill" style="width:0%"></div>
-            </div>
-          </div>
-          <div class="aprobacion-counter">
-            <span id="aprobacionActual">0</span>
-            <span class="total"> / <span id="aprobacionTotal">?</span></span>
-          </div>
-        </div>
-
-        <div id="demo-feedback-container" style="display:none; margin: 4px 0 10px 0; padding: 10px; background: #fff4e5; border-left: 4px solid #ffa117; border-radius: 4px;">
-          <div style="font-size: 11px; font-weight: 700; color: #85520d; margin-bottom: 4px;">⚠️ OBSERVACIONES PENDIENTES</div>
-          <div id="feedback-text" style="font-size: 12px; color: #664d03; line-height: 1.4;"></div>
-        </div>
-
-
-        <button class="btn btn-success" id="btnRevisadoSinComentarios" onclick="accion_revisadoSinComentarios()">
-          <span>Revisado sin Comentarios</span>
-        </button>
-        <button class="btn btn-warning" id="btnRevisadoConComentarios" onclick="accion_revisadoConComentarios()">
-          <span>Revisado con Comentarios</span>
-        </button>
-        <button class="btn btn-neutral" id="btnNoAplica" onclick="accion_noAplica()">
-          <span>No Aplica / Sin Observaciones</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- SELECTOR ROL -->
-    <div class="rol-selector" id="devRolSelector" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(248, 250, 252, 0.98); border-top: 1px solid #cbd5e1; padding: 10px 16px; z-index: 9999; backdrop-filter: blur(4px); box-shadow: 0 -4px 12px rgba(0,0,0,0.08);">
-      <div class="rol-selector-label" style="font-size:9px; color:#475569; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; display: flex; align-items: center; gap: 6px;">
-        <span style="background: #1e3a5f; color: white; padding: 1px 5px; border-radius: 2px;">MODO TEST</span> 
-        Perspectiva del revisor
-      </div>
-      <label for="selectRol" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0)">Simular rol</label>
-      <select id="selectRol" title="Cambiar perspectiva" onchange="cambiarRolSimulado(this.value)" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:6px; font-size:12px; font-weight: 500; font-family:inherit; background:#fff; color:#1e293b; cursor: pointer;">
-        <option value="dueno">Perspectiva: Dueño / Emisor</option>
-        <option value="compliance">Perspectiva: Compliance</option>
-        <option value="aprobador">Perspectiva: Aprobador</option>
-        <option value="todos">Perspectiva: Ver todo (Admin)</option>
-      </select>
-    </div>
-
-  </div>
-
-  <!-- ELEMENTOS GLOBALES (fuera del contenedor de app) -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
-    <div class="loading-text" id="loadingText">Procesando...</div>
-  </div>
-
-  <div class="toast" id="toast">
-    <span class="toast-icon" id="toastIcon">ℹ️</span>
-    <span class="toast-text" id="toastText"></span>
-  </div>
-
-  <!-- DIÁLOGO DE CONFIRMACIÓN -->
-  <div id="confirmOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:300;align-items:center;justify-content:center;">
-    <div style="background:#fff;border-radius:12px;padding:24px;max-width:280px;margin:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
-      <div style="font-size:14px;font-weight:600;color:#2f3437;margin-bottom:8px;" id="confirmTitulo"></div>
-      <div style="font-size:13px;color:#6b6f72;line-height:1.5;margin-bottom:20px;" id="confirmMensaje"></div>
-      <div style="display:flex;gap:8px;">
-        <button onclick="confirmarRespuesta(false)" style="flex:1;padding:8px;border:1px solid #e5e7eb;border-radius:5px;background:#f9fafb;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:#374151;">Cancelar</button>
-        <button onclick="confirmarRespuesta(true)" id="confirmBtn" style="flex:1;padding:8px;border:none;border-radius:5px;background:#1e3a5f;color:#fff;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;">Confirmar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: SOLICITAR PRÓRROGA -->
-  <div id="prorogaOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:300;align-items:center;justify-content:center;">
-    <div style="background:#fff;border-radius:12px;padding:24px;max-width:280px;margin:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
-      <div style="font-size:14px;font-weight:600;color:#2f3437;margin-bottom:4px;">📅 Solicitar Prórroga</div>
-      <div style="font-size:12px;color:#6b6f72;margin-bottom:16px;">Indica la fecha comprometida de entrega</div>
-      <label style="font-size:11px;color:#6b6f72;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Fecha comprometida</label>
-      <input type="date" id="prorogaFecha" style="width:100%;margin:6px 0 12px;padding:8px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;font-family:inherit;"/>
-      <label style="font-size:11px;color:#6b6f72;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Motivo (opcional)</label>
-      <textarea id="prorogaMotivo" rows="2" placeholder="Indica el motivo de la prórroga..." style="width:100%;margin:6px 0 16px;padding:8px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;font-family:inherit;resize:none;"></textarea>
-      <div style="display:flex;gap:8px;">
-        <button onclick="cerrarModal('prorogaOverlay')" style="flex:1;padding:8px;border:1px solid #e5e7eb;border-radius:5px;background:#f9fafb;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:#374151;">Cancelar</button>
-        <button onclick="confirmarProroga()" style="flex:1;padding:8px;border:none;border-radius:5px;background:#1e3a5f;color:#fff;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;">Enviar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: SOLICITAR BAJA -->
-  <div id="bajaOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:300;align-items:center;justify-content:center;">
-    <div style="background:#fff;border-radius:12px;padding:24px;max-width:280px;margin:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
-      <div style="font-size:14px;font-weight:600;color:#2f3437;margin-bottom:4px;">🗑️ Solicitar Baja</div>
-      <div style="font-size:12px;color:#6b6f72;margin-bottom:16px;">El documento será dado de baja del sistema</div>
-      <label style="font-size:11px;color:#6b6f72;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Motivo de la baja <span style="color:#e53935">*</span></label>
-      <textarea id="bajaMotivo" rows="3" placeholder="Indica el motivo de la baja del documento..." style="width:100%;margin:6px 0 16px;padding:8px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;font-family:inherit;resize:none;"></textarea>
-      <div id="bajaError" style="color:#e53935;font-size:11px;margin-bottom:8px;display:none;">El motivo es obligatorio</div>
-      <div style="display:flex;gap:8px;">
-        <button onclick="cerrarModal('bajaOverlay')" style="flex:1;padding:8px;border:1px solid #e5e7eb;border-radius:5px;background:#f9fafb;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;color:#374151;">Cancelar</button>
-        <button onclick="confirmarBaja()" style="flex:1;padding:8px;border:none;border-radius:5px;background:#7f1d1d;color:#fff;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;">Solicitar Baja</button>
-      </div>
-    </div>
-  </div>
-
-<!-- Modal de confirmación reutilizable -->
-  <div class="modal-overlay hidden" id="modalConfirmacion">
+  <!-- Modal motivo de rechazo -->
+  <div class="modal-overlay" id="rechazoOverlay">
     <div class="modal-box">
-      <div class="modal-titulo" id="modalTitulo">Confirmar acción</div>
-      <div class="modal-mensaje" id="modalMensaje">¿Estás seguro?</div>
-      <div class="modal-acciones">
-        <button class="btn btn-secondary" id="modalBtnCancelar">Cancelar</button>
-        <button class="btn btn-warning" id="modalBtnConfirmar">Confirmar</button>
+      <div style="font-size:14px; font-weight:600; color:#2f3437; margin-bottom:4px;">🚫 Rechazar borrador</div>
+      <div style="font-size:12px; color:#6b6f72; margin-bottom:16px;">El ticket se cerrará. Indica el motivo del rechazo.</div>
+      <label class="field-label">Motivo del rechazo <span style="color:#e53935">*</span></label>
+      <textarea id="rechazoMotivo" rows="3" placeholder="Ej: faltan antecedentes esenciales que impiden continuar..." class="field-textarea" style="min-height:auto;"></textarea>
+      <div class="field-error" id="rechazoError">El motivo es obligatorio.</div>
+      <div style="display:flex; gap:8px; margin-top:16px;">
+        <button onclick="cerrarRechazo()" style="flex:1; padding:8px; border:1px solid #e5e7eb; border-radius:5px; background:#f9fafb; font-size:12px; font-weight:500; cursor:pointer; font-family:inherit; color:#374151;">Cancelar</button>
+        <button onclick="confirmarRechazo()" style="flex:1; padding:8px; border:none; border-radius:5px; background:#7f1d1d; color:#fff; font-size:12px; font-weight:500; cursor:pointer; font-family:inherit;">Cerrar ticket</button>
       </div>
     </div>
   </div>
 
-  <script src="taskpane.js"></script>
+<script>
+'use strict';
 
+// ══════════════════════════════════════════════════════════════
+// FLUJO DE APROBACIÓN DEL ABOGADO (DEMO, sin backend)
+// ══════════════════════════════════════════════════════════════
+
+// Pantallas posibles del flujo
+const PANTALLAS = {
+  INICIO:              'inicio',
+  ANTECEDENTES_INPUT:  'antecedentes_input',
+  ANTECEDENTES_FIN:    'antecedentes_fin',
+  APROBAR_FIN:         'aprobar_fin',
+  RECHAZADO_FIN:       'rechazado_fin',
+};
+
+// Definición de la barra de progreso (4 hitos)
+const PASOS_FLUJO = [
+  { key: 'Borrador',        label: 'Borrador' },
+  { key: 'Revision_Legal',  label: 'Revisión' },
+  { key: 'Escrituracion',   label: 'Escrituración' },
+  { key: 'Visado',          label: 'Visado' },
+];
+const ORDEN_PASOS = ['Borrador', 'Revision_Legal', 'Escrituracion', 'Visado', 'Cerrado'];
+
+// Estado de la demo
+let state = {
+  pantalla: PANTALLAS.INICIO,
+  pasoActual: 'Revision_Legal',
+  comentario: '',
+  solicitante: 'Carolina Soto (Comercial)',
+};
+
+// ── Mapa de estado visible (badge) ──
+function mapearEstado(paso) {
+  const mapa = {
+    'Borrador':       { texto: 'Borrador en revisión',        clase: 'azul'  },
+    'Revision_Legal': { texto: 'Revisión del Abogado',        clase: 'azul'  },
+    'Escrituracion':  { texto: 'Pasó a Escrituración',        clase: 'verde' },
+    'Visado':         { texto: 'En proceso de visado',        clase: 'verde' },
+    'Cerrado':        { texto: 'Ticket cerrado / rechazado',  clase: 'rojo'  },
+  };
+  return mapa[paso] || { texto: paso, clase: 'gris' };
+}
+
+// ══════════════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════════════
+function render() {
+  // Estado badge
+  const est = mapearEstado(state.pasoActual);
+  document.getElementById('estadoTexto').textContent = est.texto;
+  document.getElementById('estadoDot').className = 'estado-dot ' + est.clase;
+
+  // Cuerpo según la pantalla
+  const c = document.getElementById('content');
+  switch (state.pantalla) {
+    case PANTALLAS.INICIO:             c.innerHTML = vistaInicio();            break;
+    case PANTALLAS.ANTECEDENTES_INPUT: c.innerHTML = vistaAntecedentesInput(); break;
+    case PANTALLAS.ANTECEDENTES_FIN:   c.innerHTML = vistaAntecedentesFin();   break;
+    case PANTALLAS.APROBAR_FIN:        c.innerHTML = vistaAprobarFin();        break;
+    case PANTALLAS.RECHAZADO_FIN:      c.innerHTML = vistaRechazadoFin();      break;
+  }
+}
+
+function renderProgreso(pasoActual) {
+  /* progreso del flujo eliminado en la demo */
+}
+
+// Panel de info del documento (reutilizable)
+function infoDoc() {
+  return `
+    <div class="doc-info">
+      <div class="doc-info-row"><span class="doc-info-key">Documento</span><span class="doc-info-val">Estudio de Título</span></div>
+      <div class="doc-info-row"><span class="doc-info-key">Propiedad</span><span class="doc-info-val">Lote 14 — El Roble</span></div>
+      <div class="doc-info-row"><span class="doc-info-key">Solicitante</span><span class="doc-info-val">${state.solicitante}</span></div>
+    </div>`;
+}
+
+// ── PANTALLA 1: INICIO (3 botones) ──
+function vistaInicio() {
+  return `
+    ${infoDoc()}
+    <div class="review-note">
+      Revisa el <strong>borrador del estudio de título</strong> que luego se transformará en escritura.
+      Verifica que todo esté correcto y elige una de las tres acciones.
+    </div>
+    <div class="rol-section">
+      <div class="rol-header"><span>Acciones del Abogado</span></div>
+      <div class="rol-body">
+        <button class="btn btn-primary" onclick="irSolicitarAntecedentes()">
+          <span>Solicitar Nuevos Antecedentes</span>
+        </button>
+        <button class="btn btn-success" onclick="irAprobar()">
+          <span>Aprobar</span>
+        </button>
+        <button class="btn btn-warning" onclick="abrirRechazo()">
+          <span>Rechazar</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+// ── PANTALLA 2a: INPUT de comentario para antecedentes ──
+function vistaAntecedentesInput() {
+  return `
+    ${infoDoc()}
+    <div class="rol-section">
+      <div class="rol-header"><span>Solicitar Nuevos Antecedentes</span></div>
+      <div class="rol-body">
+        <label class="field-label">Comentario del abogado <span style="color:#e53935">*</span></label>
+        <textarea id="comentarioAntecedentes" class="field-textarea"
+          placeholder="Describe qué documentación o antecedentes faltan para completar el estudio...">${state.comentario || ''}</textarea>
+        <div class="field-error" id="comentarioError">Ingresa un comentario antes de continuar.</div>
+        <button class="btn btn-primary" onclick="enviarAntecedentes()" style="margin-top:4px;">
+          <span>Enviar solicitud</span>
+        </button>
+        <button class="btn btn-neutral" onclick="irAInicio()">
+          <span>Volver</span>
+        </button>
+      </div>
+    </div>`;
+}
+
+// ── PANTALLA 2b: MENSAJE FINAL antecedentes ──
+function vistaAntecedentesFin() {
+  return `
+    <div class="final-banner info">
+      <div class="final-icon">📨</div>
+      <div class="final-title">Antecedentes solicitados</div>
+      <div class="final-sub">Se ha solicitado a la empresa la documentación necesaria para completar el sistema.</div>
+    </div>
+    <div class="doc-info">
+      <div class="doc-info-row"><span class="doc-info-key">Comentario enviado</span></div>
+      <div style="font-size:12px; color:#374151; line-height:1.5; padding-top:4px;">${state.comentario}</div>
+    </div>
+    <button class="btn btn-neutral" onclick="irAInicio()"><span>Volver al inicio</span></button>`;
+}
+
+// ── PANTALLA 3: MENSAJE FINAL aprobación ──
+function vistaAprobarFin() {
+  return `
+    <div class="final-banner success">
+      <div class="final-icon">✅</div>
+      <div class="final-title">Borrador aprobado</div>
+      <div class="final-sub">
+        Se ha creado un archivo que será enviado para ser visado y generar la escrituración.
+        También se ha enviado una notificación al usuario que solicitó la escrituración.
+      </div>
+    </div>
+    <div class="doc-info">
+      <div class="doc-info-row"><span class="doc-info-key">Nuevo estado</span><span class="doc-info-val">Escrituración</span></div>
+      <div class="doc-info-row"><span class="doc-info-key">Notificado a</span><span class="doc-info-val">${state.solicitante}</span></div>
+    </div>
+    <button class="btn btn-neutral" onclick="irAInicio()"><span>Volver al inicio</span></button>`;
+}
+
+// ── PANTALLA 4: MENSAJE FINAL rechazo ──
+function vistaRechazadoFin() {
+  return `
+    <div class="final-banner danger">
+      <div class="final-icon">🚫</div>
+      <div class="final-title">Ticket cerrado</div>
+      <div class="final-sub">El borrador fue rechazado y el ticket se ha cerrado.</div>
+    </div>
+    <div class="doc-info">
+      <div class="doc-info-row"><span class="doc-info-key">Motivo del rechazo</span></div>
+      <div style="font-size:12px; color:#374151; line-height:1.5; padding-top:4px;">${state.comentario}</div>
+    </div>
+    <button class="btn btn-neutral" onclick="irAInicio()"><span>Volver al inicio</span></button>`;
+}
+
+// ══════════════════════════════════════════════════════════════
+// ACCIONES / NAVEGACIÓN
+// ══════════════════════════════════════════════════════════════
+function irAInicio() {
+  state.pantalla = PANTALLAS.INICIO;
+  state.pasoActual = 'Revision_Legal';
+  state.comentario = '';
+  render();
+}
+
+// Botón 1: Solicitar Nuevos Antecedentes
+function irSolicitarAntecedentes() {
+  state.pantalla = PANTALLAS.ANTECEDENTES_INPUT;
+  render();
+}
+function enviarAntecedentes() {
+  const val = document.getElementById('comentarioAntecedentes').value.trim();
+  if (!val) {
+    document.getElementById('comentarioError').classList.add('show');
+    return;
+  }
+  state.comentario = val;
+  state.pantalla = PANTALLAS.ANTECEDENTES_FIN;
+  render();
+  toast('Solicitud de antecedentes enviada.', 'info');
+}
+
+// Botón 2: Aprobar
+function irAprobar() {
+  state.pasoActual = 'Escrituracion';   // avanza el punto del flujo
+  state.pantalla = PANTALLAS.APROBAR_FIN;
+  render();
+  toast('Borrador aprobado. Enviado a escrituración.', 'success');
+}
+
+// Botón 3: Rechazar (con motivo)
+function abrirRechazo() {
+  document.getElementById('rechazoMotivo').value = '';
+  document.getElementById('rechazoError').classList.remove('show');
+  document.getElementById('rechazoOverlay').classList.add('show');
+}
+function cerrarRechazo() {
+  document.getElementById('rechazoOverlay').classList.remove('show');
+}
+function confirmarRechazo() {
+  const val = document.getElementById('rechazoMotivo').value.trim();
+  if (!val) { document.getElementById('rechazoError').classList.add('show'); return; }
+  state.comentario = val;
+  state.pasoActual = 'Cerrado';
+  state.pantalla = PANTALLAS.RECHAZADO_FIN;
+  cerrarRechazo();
+  render();
+  toast('Ticket cerrado.', 'info');
+}
+
+// ── Toast ──
+let _t = null;
+function toast(msg, tipo = 'info') {
+  const el = document.getElementById('toast');
+  document.getElementById('toastIcon').textContent = tipo === 'success' ? '✅' : 'ℹ️';
+  document.getElementById('toastText').textContent = msg;
+  el.className = 'toast ' + tipo + ' show';
+  if (_t) clearTimeout(_t);
+  _t = setTimeout(() => el.classList.remove('show'), 3500);
+}
+
+// Init
+render();
+</script>
 </body>
 </html>
