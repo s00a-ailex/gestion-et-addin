@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Revisión Legal — Estudio de Título</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
   <style>
     :root {
       --corp-dark:      #1e3a5f;
@@ -431,8 +432,12 @@ function toast(msg, tipo = 'info') {
   _t = setTimeout(() => el.classList.remove('show'), 3500);
 }
 
-// Init
-render();
+// ── Init: esperar a que Office esté listo dentro de Word ──
+if (typeof Office !== "undefined" && Office.onReady) {
+  Office.onReady(() => render());
+} else {
+  render();
+}
 </script>
 </body>
 </html>
